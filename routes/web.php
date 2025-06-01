@@ -7,13 +7,17 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::view('dashboard', 'dashboard')
+Route::view('casa', 'casa')
     ->middleware(['auth', 'verified'])
+    ->name('casa');
+
+Route::view('dashboard', 'dashboard')
+    ->middleware(['auth', 'verified', 'role:admin'])
     ->name('dashboard');
+
 
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
-
     Volt::route('settings/profile', 'settings.profile')->name('settings.profile');
     Volt::route('settings/password', 'settings.password')->name('settings.password');
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');

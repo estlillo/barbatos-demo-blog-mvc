@@ -14,6 +14,9 @@ new #[Layout('components.layouts.auth')] class extends Component {
     public string $password = '';
     public string $password_confirmation = '';
 
+    public string $role = '';
+    public array $roles = ['user', 'admin'];
+
     /**
      * Handle an incoming registration request.
      */
@@ -23,11 +26,14 @@ new #[Layout('components.layouts.auth')] class extends Component {
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
+            'role' => ['required', 'in:' . implode(',', $this->roles)],
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
 
         event(new Registered(($user = User::create($validated))));
+
+        $user->assignRole($validated['role']);
 
         Auth::login($user);
 
@@ -84,6 +90,17 @@ new #[Layout('components.layouts.auth')] class extends Component {
             :placeholder="__('Confirm password')"
             viewable
         />
+
+        <flux:select
+            wire:model="role"
+            :label="__('Rol')"
+            required
+        >
+            <option value="">{{ __('Selecciona un rol') }}</option>
+            @foreach($roles as $rol)
+                <option value="{{ $rol }}">{{ ucfirst($rol) }}</option>
+            @endforeach
+        </flux:select>
 
         <div class="flex items-center justify-end">
             <flux:button type="submit" variant="primary" class="w-full">

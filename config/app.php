@@ -123,4 +123,7 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'enable_default_options' => env('ENABLE_DEFAULT_OPTIONS', false),
+    'enable_user_settings' => env('ENABLE_USER_SETTINGS', false),
+
 ];
