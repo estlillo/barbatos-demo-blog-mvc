@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
@@ -14,6 +15,10 @@ Route::view('casa', 'casa')
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified', 'role:admin'])
     ->name('dashboard');
+
+Route::resource('categories', CategoryController::class, )
+    ->names('categories')
+    ->middleware(['auth', 'verified', 'role:admin']);
 
 
 Route::middleware(['auth'])->group(function () {
