@@ -71,17 +71,17 @@ new class extends Component {
 
         $user->save();
 
-        $person = $user->person;
-        if ($person) {
-            $person->update([
+        $user->person()->updateOrCreate(
+            ['user_id' => $user->id],
+            [
                 'phone' => $this->phone,
                 'birth_date' => $this->birth_date,
                 'address' => $this->address,
                 'gender' => $this->gender,
                 'nationality' => $this->nationality,
                 'biography' => $this->biography,
-            ]);
-        }
+            ]
+        );
 
         $this->dispatch('profile-updated', name: $user->name);
     }
