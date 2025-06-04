@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
+use Spatie\Permission\Models\Role;
 
 new #[Layout('components.layouts.auth')] class extends Component {
     public string $name = '';
@@ -15,7 +16,14 @@ new #[Layout('components.layouts.auth')] class extends Component {
     public string $password_confirmation = '';
 
     public string $role = '';
-    public array $roles = ['user', 'admin'];
+    public array $roles = [];
+
+
+    public function mount()
+    {
+        $this->roles = Role::all()->toArray();
+    }
+
 
     /**
      * Handle an incoming registration request.
@@ -26,12 +34,14 @@ new #[Layout('components.layouts.auth')] class extends Component {
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
-            'role' => ['required', 'in:' . implode(',', $this->roles)],
+            'role' => ['required', 'in:' . implode(',', array_column($this->roles, 'name'))],
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
 
         event(new Registered(($user = User::create($validated))));
+
+        $user->person()->create([]);
 
         $user->assignRole($validated['role']);
 
@@ -98,7 +108,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
         >
             <option value="">{{ __('Selecciona un rol') }}</option>
             @foreach($roles as $rol)
-                <option value="{{ $rol }}">{{ ucfirst($rol) }}</option>
+                <option value="{{ $rol['name'] }}">{{ ucfirst($rol['name']) }}</option>
             @endforeach
         </flux:select>
 
