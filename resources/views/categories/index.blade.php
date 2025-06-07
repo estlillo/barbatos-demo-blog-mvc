@@ -37,6 +37,25 @@
                                 {{ __('Editar') }}
                             </flux:button>
                         </a>
+                        <form action="{{ route('categories.destroy', $category) }}" method="POST" class="inline">
+                            @csrf
+                            @method('DELETE')
+                            <flux:button type="submit" variant="danger" onclick="event.preventDefault(); Swal.fire({
+                                title: '{{ __('¿Estás seguro de que deseas eliminar la categoría :name?', ['name' => $category->name]) }}',
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#d33',
+                                cancelButtonColor: '#3085d6',
+                                confirmButtonText: '{{ __('Aceptar') }}',
+                                cancelButtonText: '{{ __('Cancelar') }}'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    this.closest('form').submit();
+                                }
+                            });">
+                                {{ __('Eliminar') }}
+                            </flux:button>
+                        </form>
                     </td>
                 </tr>
                 @endforeach
