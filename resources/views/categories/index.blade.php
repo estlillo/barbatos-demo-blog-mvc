@@ -4,7 +4,7 @@
             <flux:breadcrumbs.item href="{{route('home')}}">Home</flux:breadcrumbs.item>
             <flux:breadcrumbs.item>Categorías</flux:breadcrumbs.item>
         </flux:breadcrumbs>
-        <flux:button href="{{ route('categories.create') }}" variant="primary" >
+        <flux:button href="{{ route('categories.create') }}" variant="primary" wire:navigate>
             {{ __('Crear') }}
         </flux:button>
     </div>

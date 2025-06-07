@@ -2,9 +2,10 @@
     <div class="flex items-center justify-between mb-4">
         <flux:breadcrumbs class="mb-4">
             <flux:breadcrumbs.item href="{{route('home')}}">Home</flux:breadcrumbs.item>
-            <flux:breadcrumbs.item>Categorías</flux:breadcrumbs.item>
+            <flux:breadcrumbs.item href="{{route('categories.index')}}">Categorías</flux:breadcrumbs.item>
+            <flux:breadcrumbs.item>Crear</flux:breadcrumbs.item>
         </flux:breadcrumbs>
-        <flux:button href="{{ route('categories.index') }}" variant="primary">
+        <flux:button href="{{ route('categories.index') }}" variant="primary" wire:navigate>
             {{ __('Volver') }}
         </flux:button>
     </div>
