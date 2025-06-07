@@ -1,8 +1,14 @@
 <x-layouts.app :title="__('Categories')">
-    <flux:breadcrumbs class="mb-4">
-        <flux:breadcrumbs.item href="{{route('home')}}">Home</flux:breadcrumbs.item>
-        <flux:breadcrumbs.item>Categorías</flux:breadcrumbs.item>
-    </flux:breadcrumbs>
+    <div class="flex items-center justify-between mb-4">
+        <flux:breadcrumbs class="mb-4">
+            <flux:breadcrumbs.item href="{{route('home')}}">Home</flux:breadcrumbs.item>
+            <flux:breadcrumbs.item>Categorías</flux:breadcrumbs.item>
+        </flux:breadcrumbs>
+        <flux:button href="{{ route('categories.create') }}" variant="primary" >
+            {{ __('Crear') }}
+        </flux:button>
+    </div>
+
 
     <!--<x-page-title :title="__('Categories')" :subtitle="__('Subtitulo para categories')" />-->
     <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
@@ -28,8 +34,8 @@
                     <td class="px-6 py-4 text-right">
                         <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
                     </td>
+                </tr>
                 @endforeach
-
                 </tbody>
             </table>
         </div>

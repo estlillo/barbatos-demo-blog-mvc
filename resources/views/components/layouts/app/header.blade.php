@@ -79,5 +79,15 @@
         {{ $slot }}
 
         @fluxScripts
-    </body>
+
+        @if(session()->has('message'))
+            <script>
+                Swal.fire(Object.assign({
+                    confirmButtonText: 'Aceptar',
+                    timer: 10000,
+                    timerProgressBar: true,
+                    confirmButtonColor: "#3085d6",
+                }, @json(session('message'))));
+            </script>
+        @endif
 </html>
