@@ -58,7 +58,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        return view('categories.edit', compact('category'));
     }
 
     /**
@@ -66,7 +66,20 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required|string|max:255|unique:categories,name,' . $category->id
+        ]);
+
+        $category->update($data);
+
+        session()->flash('message', [
+            'icon' => 'success',
+            'title' => 'Categoría actualizada correctamente',
+            'text' => 'La categoría ha sido actualizada.',
+        ]);
+
+        return redirect()->route('categories.index');
+
     }
 
     /**
