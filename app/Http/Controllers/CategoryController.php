@@ -87,6 +87,10 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+        if (!auth()->user() || !auth()->user()->hasRole('admin')) {
+            abort(403, 'No tienes permiso para eliminar categorías.');
+        }
+
         $category->delete();
 
         session()->flash('message', [

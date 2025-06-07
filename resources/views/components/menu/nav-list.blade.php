@@ -6,9 +6,6 @@
     <flux:navbar.item :href="route('categories.index')" :current="request()->routeIs('categories.*')" wire:navigate>{{ __('Categorías') }}</flux:navbar.item>
 @endif
 
-<flux:navbar.item :href="route('casa')" :current="request()->routeIs('casa')" wire:navigate>{{ __('Casita') }}</flux:navbar.item>
-
-
 <!-- Dropdown menu with local component -->
 @if(auth()->user()->hasRole('super-admin'))
 <x-menu.dropdown-menu
