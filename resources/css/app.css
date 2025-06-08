@@ -61,6 +61,44 @@ select:focus[data-flux-control] {
     @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
 }
 
+/* Modo oscuro para Quill */
+.dark .ql-toolbar,
+.dark .ql-container {
+    background-color: #1f2937 !important; /* gris oscuro */
+    color: #f3f4f6 !important;
+    border-color: #374151 !important;
+}
+
+.dark .ql-editor {
+    background-color: #1f2937 !important;
+    color: #f3f4f6 !important;
+}
+
+.dark .ql-picker-options {
+    background-color: #1f2937 !important;
+    color: #f3f4f6 !important;
+}
+
+.dark .ql-toolbar button svg {
+    fill: #f3f4f6 !important;
+}
+
+.dark .ql-stroke {
+    stroke: whitesmoke !important;
+}
+
+.dark .ql-formats {
+    stroke: whitesmoke !important;
+}
+
+.dark .ql-picker {
+    color: whitesmoke !important;
+}
+
+.dark .ql-editor.ql-blank::before {
+    color: #9ca3af;
+}
+
 /* \[:where(&)\]:size-4 {
     @apply size-4;
 } */

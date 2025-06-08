@@ -40,15 +40,11 @@
                         @endforeach
                     </flux:select>
                     <flux:input name="excerpt" :label="__('Extracto')" type="text" value="{{old('excerpt', $post->excerpt)}}" />
-                    <div>
-                        <p class="font-medium text-sm mb-2">
-                            Contenido
-                        </p>
-                        <div id="editor">
-                            {!!old('content', $post->content)!!}
-                        </div>
-                        <textarea class="hidden" name="content" id="content" >{{old('content', $post->content)}}</textarea>
-                    </div>
+                    <x-rich-text
+                        name="content"
+                        :label="__('Contenido')"
+                        :value="$post->content"
+                    />
 
                     <flux:radio.group name="is_published" label="¿Publicar ahora?" variant="segmented">
                         <flux:radio
@@ -80,27 +76,6 @@
                     preview.src = URL.createObjectURL(file);
                 }
             }
-
-            function initializeQuill() {
-                const quillContainer = document.getElementById('editor');
-                if (quillContainer && !quillContainer.classList.contains('quill-initialized')) {
-                    quillContainer.style.minHeight = '300px';
-                    const quill = new Quill('#editor', {
-                        theme: 'snow',
-                        placeholder: 'Escribe el contenido aquí...',
-                    });
-
-                    quill.on('text-change', function() {
-                        const content = quill.root.innerHTML;
-                        document.getElementById('content').value = content;
-                    });
-
-                    quillContainer.classList.add('quill-initialized');
-                }
-            }
-
-            document.addEventListener('DOMContentLoaded', initializeQuill);
-            document.addEventListener('livewire:navigated', initializeQuill); // si usas Livewire v3
         </script>
     @endpush
 </x-layouts.app>

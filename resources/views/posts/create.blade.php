@@ -23,7 +23,10 @@
                         @endforeach
                     </flux:select>
                     <flux:input name="excerpt" :label="__('Extracto')" type="text" value="{{old('excerpt')}}" />
-                    <flux:textarea name="content" rows="15" :label="__('Contenido')">{{ old('content') }}</flux:textarea>
+                    <x-rich-text
+                        name="content"
+                        :label="__('Contenido')"
+                    />
                     <flux:radio.group name="is_published" label="¿Publicar ahora?" variant="segmented" value="{{ old('is_published', 1) }}">
                         <flux:radio icon="eye" label="Publicar" value="1" checked/>
                         <flux:radio icon="eye-slash" label="No Publicar" value="0" />
