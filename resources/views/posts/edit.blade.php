@@ -40,7 +40,15 @@
                         @endforeach
                     </flux:select>
                     <flux:input name="excerpt" :label="__('Extracto')" type="text" value="{{old('excerpt', $post->excerpt)}}" />
-                    <flux:textarea name="content" rows="15" :label="__('Contenido')">{{ old('content', $post->content) }}</flux:textarea>
+                    <div>
+                        <p class="font-medium text-sm mb-2">
+                            Contenido
+                        </p>
+                        <div id="editor">
+                            {!!old('content', $post->content)!!}
+                        </div>
+                        <textarea class="hidden" name="content" id="content" >{{old('content', $post->content)}}</textarea>
+                    </div>
 
                     <flux:radio.group name="is_published" label="¿Publicar ahora?" variant="segmented">
                         <flux:radio
@@ -63,13 +71,36 @@
             </form>
         </div>
     </div>
-    <script>
-        function previewSelectedImage(input) {
-            const file = input.files[0];
-            if (file) {
-                const preview = document.getElementById('preview-image');
-                preview.src = URL.createObjectURL(file);
+    @push('scripts')
+        <script>
+            function previewSelectedImage(input) {
+                const file = input.files[0];
+                if (file) {
+                    const preview = document.getElementById('preview-image');
+                    preview.src = URL.createObjectURL(file);
+                }
             }
-        }
-    </script>
+
+            function initializeQuill() {
+                const quillContainer = document.getElementById('editor');
+                if (quillContainer && !quillContainer.classList.contains('quill-initialized')) {
+                    quillContainer.style.minHeight = '300px';
+                    const quill = new Quill('#editor', {
+                        theme: 'snow',
+                        placeholder: 'Escribe el contenido aquí...',
+                    });
+
+                    quill.on('text-change', function() {
+                        const content = quill.root.innerHTML;
+                        document.getElementById('content').value = content;
+                    });
+
+                    quillContainer.classList.add('quill-initialized');
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', initializeQuill);
+            document.addEventListener('livewire:navigated', initializeQuill); // si usas Livewire v3
+        </script>
+    @endpush
 </x-layouts.app>

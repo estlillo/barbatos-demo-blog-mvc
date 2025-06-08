@@ -78,7 +78,10 @@
 
         {{ $slot }}
 
+        @stack('scripts')
         @fluxScripts
+
+    </body>
 
         @if(session()->has('message'))
             <script>
