@@ -40,6 +40,16 @@
                         @endforeach
                     </flux:select>
                     <flux:input name="excerpt" :label="__('Extracto')" type="text" value="{{old('excerpt', $post->excerpt)}}" />
+
+                    <x-select2-multiple
+                        :options="$tags"
+                        :selected="old('tags', $post->tags->pluck('id')->toArray())"
+                        name="tags"
+                        label="Etiquetas"
+                        placeholder="Selecciona etiquetas"
+                        tags="true"
+                    />
+
                     <x-rich-text
                         name="content"
                         :label="__('Contenido')"

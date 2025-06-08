@@ -23,6 +23,13 @@
                         @endforeach
                     </flux:select>
                     <flux:input name="excerpt" :label="__('Extracto')" type="text" value="{{old('excerpt')}}" />
+                    <x-select2-multiple
+                        :options="$tags"
+                        name="tags"
+                        label="Etiquetas"
+                        placeholder="Selecciona etiquetas"
+                        tags="true"
+                    />
                     <x-rich-text
                         name="content"
                         :label="__('Contenido')"
@@ -35,6 +42,7 @@
                 <div class="px-6 py-4 bg-gray-50 dark:bg-gray-800 text-right">
                     <flux:button type="submit" variant="primary">{{ __('Guardar') }}</flux:button>
                 </div>
+
             </form>
         </div>
     </div>

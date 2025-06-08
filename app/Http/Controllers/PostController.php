@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -26,8 +27,9 @@ class PostController extends Controller
     public function create()
     {
         $categories = Category::all();
+        $tags = Tag::all();
 
-        return view('posts.create', compact('categories'));
+        return view('posts.create', compact('categories', 'tags'));
 
     }
 
@@ -36,28 +38,28 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-
         $data = $request->validate([
             'title' => 'required|string|max:255',
             'excerpt' => 'required|string|max:500',
             'content' => 'required|string',
             'category_id' => 'required|exists:categories,id',
+            'tags' => 'array|nullable',
             'is_published' => 'boolean',
         ]);
 
-        //handle published_at
-        if ($data['is_published']) {
-            $data['published_at'] = now();
-        }
-
-        $data['slug'] = Str::slug($data['title']);
-        if (Post::where('slug', $data['slug'])->exists()) {
-            $data['slug'] .= '-' . substr(md5(uniqid(mt_rand(), true)), 0, 8);
-        }
-
+        $data['published_at'] = $data['is_published'] ? now() : null;
+        $data['slug'] = Post::where('slug', $slug = Str::slug($data['title']))->exists()
+            ? $slug . '-' . substr(md5(uniqid(mt_rand(), true)), 0, 8)
+            : $slug;
         $data['user_id'] = auth()->id();
 
-        Post::create($data);
+        $post = Post::create($data);
+
+        $tags = collect($request->tags ?? [])
+            ->map(fn($tag) => Tag::firstOrCreate(['name' => $tag]))
+            ->all();
+
+        $post->tags()->sync($tags);
 
         session()->flash('message', [
             'icon' => 'success',
@@ -83,8 +85,9 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         $categories = Category::all();
+        $tags = Tag::all();
 
-        return view('posts.edit', compact('post', 'categories'));
+        return view('posts.edit', compact('post', 'categories', 'tags'));
 
     }
 
@@ -98,19 +101,23 @@ class PostController extends Controller
             'excerpt' => 'required|string|max:500',
             'content' => 'required|string',
             'category_id' => 'required|exists:categories,id',
+            'tags' => 'array',
             'is_published' => 'boolean',
         ]);
 
-        $data['slug'] = Str::slug($data['title']);
-        if (Post::where('slug', $data['slug'])->where('id', '!=', $post->id)->exists()) {
-            $data['slug'] .= '-' . substr(md5(uniqid(mt_rand(), true)), 0, 8);
-        }
+        $data['slug'] = Post::where('slug', $slug = Str::slug($data['title']))
+            ->where('id', '!=', $post->id)
+            ->exists() ? $slug . '-' . substr(md5(uniqid(mt_rand(), true)), 0, 8) : $slug;
 
-        if ($data['is_published'] && !$post->is_published) {
-            $data['published_at'] = now();
-        }
+        $data['published_at'] = $data['is_published'] && !$post->is_published ? now() : $post->published_at;
 
         $post->update($data);
+
+        $tags = collect($request->tags ?? [])
+            ->map(fn($tag) => Tag::firstOrCreate(['name' => $tag]))
+            ->all();
+
+        $post->tags()->sync($tags);
 
         session()->flash('message', [
             'icon' => 'success',
@@ -119,7 +126,6 @@ class PostController extends Controller
         ]);
 
         return redirect()->route('posts.index');
-
     }
 
     /**
