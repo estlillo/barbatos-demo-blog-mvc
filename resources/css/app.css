@@ -99,6 +99,36 @@ select:focus[data-flux-control] {
     color: #9ca3af;
 }
 
+.dark .select2-container--classic .select2-selection--multiple {
+    background-color: #3c3c3c;
+    border: 1px solid #545454;
+    color: #d4d4d4;
+}
+
+.dark .select2-container--classic .select2-selection--multiple .select2-selection__choice {
+    background-color: #4b5563;
+    border-radius: 4px;
+    color: #d4d4d4;
+    padding: 0 5px;
+}
+.dark .select2-container--classic .select2-selection--multiple .select2-selection__choice__remove {
+    color: #d4d4d4;
+}
+
+.dark .select2-container--classic .select2-results__option--highlighted.select2-results__option--selectable {
+    background-color: #99c8ff;
+    color: #3c3c3c;
+}
+
+.dark .select2-results__options {
+    background-color: #404040;
+}
+
+.dark .select2-container--classic.select2-container--open .select2-dropdown {
+    border-color: none;
+}
+
+
 /* \[:where(&)\]:size-4 {
     @apply size-4;
 } */
