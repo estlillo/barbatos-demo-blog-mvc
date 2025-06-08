@@ -16,6 +16,18 @@
             <form action="{{ route('posts.update', $post) }}" method="POST" class="w-full" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
+                <div class="p-6 space-y-6 relative mb-2">
+                    {{-- Imagen actual o previsualización --}}
+                    <img id="preview-image" class="w-full aspect-video object-center object-contain" src="{{ asset('images/no-image.png') }}" alt="Imagen actual">
+
+                    {{-- Botón para subir --}}
+                    <div class="absolute top-0 right-0 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-4 py-2 rounded-bl-lg">
+                        <label class="cursor-pointer text-xs font-semibold">
+                            {{ __('Cambiar imagen') }}
+                            <input type="file" name="image" class="hidden" accept="image/*" onchange="previewSelectedImage(this)">
+                        </label>
+                    </div>
+                </div>
                 <div class="p-6 space-y-6">
                     <flux:input name="title" :label="__('Título')" type="text" autofocus value="{{old('title', $post->title)}}" />
                     <flux:input name="slug" :label="__('Slug')" type="text" value="{{old('slug', $post->slug)}}" disabled/>
@@ -51,4 +63,13 @@
             </form>
         </div>
     </div>
+    <script>
+        function previewSelectedImage(input) {
+            const file = input.files[0];
+            if (file) {
+                const preview = document.getElementById('preview-image');
+                preview.src = URL.createObjectURL(file);
+            }
+        }
+    </script>
 </x-layouts.app>
