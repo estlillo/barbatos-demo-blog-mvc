@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
@@ -18,6 +19,10 @@ Route::view('dashboard', 'dashboard')
 
 Route::resource('categories', CategoryController::class, )
     ->names('categories')
+    ->middleware(['auth', 'verified', 'role:admin']);
+
+Route::resource('posts', PostController::class)
+    ->names('posts')
     ->middleware(['auth', 'verified', 'role:admin']);
 
 
