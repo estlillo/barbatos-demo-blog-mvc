@@ -75,19 +75,11 @@
                     <flux:button
                         type="submit"
                         variant="primary"
-                        wire:loading.attr="disabled"
-                        wire:target="save"
                     >
                         {{ __('Actualizar') }}
                     </flux:button>
                 </div>
             </form>
-        </div>
-        <flux:button id="submit-button" type="submit" variant="primary">
-            {{ __('Actualizar') }}
-        </flux:button>
-        <div id="form-loading" class="hidden text-sm text-gray-600 dark:text-gray-300 mt-2">
-            {{ __('Guardando publicación...') }}
         </div>
     </div>
     @push('scripts')
