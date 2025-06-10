@@ -2,13 +2,12 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DownloadController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::view('casa', 'casa')
     ->middleware(['auth', 'verified'])
@@ -24,10 +23,9 @@ Route::resource('categories', CategoryController::class, )
 
 Route::resource('posts', PostController::class)
     ->names('posts')
-    ->middleware(['auth', 'verified', 'role:admin']);
+    ->middleware(['auth', 'verified', 'role:admin|user']);
 
 Route::get('/download/{file}', [DownloadController::class, 'download'])
-    ->middleware('auth')
     ->name('file.download');
 
 

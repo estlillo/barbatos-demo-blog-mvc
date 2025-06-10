@@ -24,9 +24,14 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::with(['category', 'user'])
-            ->orderBy('posts.published_at', 'desc')
-            ->paginate(10);
+        $query = Post::with(['category', 'user'])->orderBy('posts.published_at', 'desc');
+
+        if (!auth()->user()->hasRole('admin')) {
+            $query->where('user_id', auth()->id());
+        }
+
+        $posts = $query->paginate(10);
+
         return view('posts.index', compact('posts'));
     }
 

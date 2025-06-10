@@ -34,7 +34,6 @@ new #[Layout('components.layouts.auth')] class extends Component {
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
-            'role' => ['required', 'in:' . implode(',', array_column($this->roles, 'name'))],
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
@@ -43,11 +42,13 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
         $user->person()->create([]);
 
-        $user->assignRole($validated['role']);
+        $user->assignRole(
+            $this->role ?: Role::where('name', 'user')->first()->name
+        );
 
         Auth::login($user);
 
-        $this->redirectIntended(route('home', absolute: false), navigate: true);
+        $this->redirect(route('home', absolute: false), navigate: true);
     }
 }; ?>
 
@@ -100,18 +101,6 @@ new #[Layout('components.layouts.auth')] class extends Component {
             :placeholder="__('Confirm password')"
             viewable
         />
-
-        <flux:select
-            wire:model="role"
-            :label="__('Rol')"
-            required
-        >
-            <option value="">{{ __('Selecciona un rol') }}</option>
-            @foreach($roles as $rol)
-                <option value="{{ $rol['name'] }}">{{ ucfirst($rol['name']) }}</option>
-            @endforeach
-        </flux:select>
-
         <div class="flex items-center justify-end">
             <flux:button type="submit" variant="primary" class="w-full">
                 {{ __('Create account') }}
