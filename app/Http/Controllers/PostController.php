@@ -59,7 +59,7 @@ class PostController extends Controller
             'category_id' => 'required|exists:categories,id',
             'tags' => 'array|nullable',
             'is_published' => 'boolean',
-            'image_path' => 'nullable|image|max:2048',
+            'image_path' => 'nullable|image',
         ]);
 
         if ($request->hasFile('image_path')) {
@@ -129,7 +129,7 @@ class PostController extends Controller
             'category_id' => 'required|exists:categories,id',
             'tags' => 'array',
             'is_published' => 'boolean',
-            'image_path' => 'nullable|image|max:2048',
+            'image_path' => 'nullable|image',
         ]);
 
 
