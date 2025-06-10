@@ -39,7 +39,7 @@
                         @endforeach
                     </div>
 
-                    <a href="{{ route('posts.show', $post) }}" class="text-blue-600 hover:underline dark:text-blue-400">
+                    <a href="{{ route('posts.show', ['post' => $post, 'from' => request()->fullUrl()]) }}">
                         Leer más →
                     </a>
                 </div>

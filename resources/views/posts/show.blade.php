@@ -44,10 +44,11 @@
 
         {{-- Botón de regreso --}}
         <div class="pt-6">
-            <a href="{{ route('home') }}"
+            <a href="{{ request('from') ?? route('home') }}"
                class="text-blue-600 dark:text-blue-400 hover:underline text-sm">
-                ← Volver a publicaciones
+                ← Volver
             </a>
+
         </div>
 
     </div>
