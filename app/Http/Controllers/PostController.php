@@ -5,11 +5,20 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
+use App\Services\RepositoryService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
+    protected RepositoryService $repository;
+
+    public function __construct(RepositoryService $repository)
+    {
+        $this->repository = $repository;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -45,11 +54,23 @@ class PostController extends Controller
             'category_id' => 'required|exists:categories,id',
             'tags' => 'array|nullable',
             'is_published' => 'boolean',
+            'image_path' => 'nullable|image|max:2048',
         ]);
+
+        if ($request->hasFile('image_path')) {
+            $image = $request->file('image_path');
+            $fileName = Str::uuid() . '.' . $image->extension();
+
+            if (!$this->repository->uploadContent($fileName, file_get_contents($image->getRealPath()))) {
+                return response()->json(['error' => 'Error saving file'], 500);
+            }
+
+            $data['image_path'] = $fileName;
+        }
 
         $data['published_at'] = $data['is_published'] ? now() : null;
         $data['slug'] = Post::where('slug', $slug = Str::slug($data['title']))->exists()
-            ? $slug . '-' . substr(md5(uniqid(mt_rand(), true)), 0, 8)
+            ? $slug . '-' . substr(md5(uniqid()), 0, 8)
             : $slug;
         $data['user_id'] = auth()->id();
 
@@ -103,11 +124,28 @@ class PostController extends Controller
             'category_id' => 'required|exists:categories,id',
             'tags' => 'array',
             'is_published' => 'boolean',
+            'image_path' => 'nullable|image|max:2048',
         ]);
+
+
+        if ($request->hasFile('image_path')) {
+            $image = $request->file('image_path');
+            $fileName = Str::uuid() . '.' . $image->extension();
+
+            if (!$this->repository->uploadContent($fileName, file_get_contents($image->getRealPath()))) {
+                return response()->json(['error' => 'Error saving file'], 500);
+            }
+
+            $data['image_path'] = $fileName;
+        }
+
+        $data['image_path'] = $data['image_path'] ?? $post->image_path;
+
+
 
         $data['slug'] = Post::where('slug', $slug = Str::slug($data['title']))
             ->where('id', '!=', $post->id)
-            ->exists() ? $slug . '-' . substr(md5(uniqid(mt_rand(), true)), 0, 8) : $slug;
+            ->exists() ? $slug . '-' . substr(md5(uniqid()), 0, 8) : $slug;
 
         $data['published_at'] = $data['is_published'] && !$post->is_published ? now() : $post->published_at;
 

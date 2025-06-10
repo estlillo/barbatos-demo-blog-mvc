@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
@@ -24,6 +25,10 @@ Route::resource('categories', CategoryController::class, )
 Route::resource('posts', PostController::class)
     ->names('posts')
     ->middleware(['auth', 'verified', 'role:admin']);
+
+Route::get('/download/{file}', [DownloadController::class, 'download'])
+    ->middleware('auth')
+    ->name('file.download');
 
 
 Route::middleware(['auth'])->group(function () {

@@ -18,13 +18,13 @@
                 @method('PUT')
                 <div class="p-6 space-y-6 relative mb-2">
                     {{-- Imagen actual o previsualización --}}
-                    <img id="preview-image" class="w-full aspect-video object-center object-contain" src="{{ asset('images/no-image.png') }}" alt="Imagen actual">
+                    <img id="preview-image" class="w-full aspect-video object-center object-contain" src="{{ $post->image_path ? route('file.download', $post->image_path)  : asset('images/no-image.png') }}" alt="Imagen actual">
 
                     {{-- Botón para subir --}}
                     <div class="absolute top-0 right-0 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-4 py-2 rounded-bl-lg">
                         <label class="cursor-pointer text-xs font-semibold">
                             {{ __('Cambiar imagen') }}
-                            <input type="file" name="image" class="hidden" accept="image/*" onchange="previewSelectedImage(this)">
+                            <input type="file" name="image_path" class="hidden" accept="image/*" onchange="previewSelectedImage(this)">
                         </label>
                     </div>
                 </div>
@@ -72,9 +72,22 @@
                     </flux:radio.group>
                 </div>
                 <div class="px-6 py-4 bg-gray-50 dark:bg-gray-800 text-right">
-                    <flux:button type="submit" variant="primary">{{ __('Actualizar') }}</flux:button>
+                    <flux:button
+                        type="submit"
+                        variant="primary"
+                        wire:loading.attr="disabled"
+                        wire:target="save"
+                    >
+                        {{ __('Actualizar') }}
+                    </flux:button>
                 </div>
             </form>
+        </div>
+        <flux:button id="submit-button" type="submit" variant="primary">
+            {{ __('Actualizar') }}
+        </flux:button>
+        <div id="form-loading" class="hidden text-sm text-gray-600 dark:text-gray-300 mt-2">
+            {{ __('Guardando publicación...') }}
         </div>
     </div>
     @push('scripts')
