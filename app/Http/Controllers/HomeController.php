@@ -8,7 +8,13 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $posts = Post::where('is_published', true)->whereNotNull('published_at')->with('user', 'category', 'tags')->latest()->paginate(10);
+        $posts = Post::where('is_published', true)
+            ->whereNotNull('published_at')
+            ->with(['user', 'category', 'tags'])
+            ->withCount('comments')
+            ->latest()
+            ->paginate(10);
+
         return view('home', compact('posts'));
     }
 }

@@ -41,6 +41,45 @@
         <div class="prose dark:prose-invert max-w-none">
             {!! $post->content !!}
         </div>
+        <div class="mt-10">
+            <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">Comentarios ({{ $post->comments->count() }})</h3>
+            {{-- Formulario --}}
+            @auth
+                <form action="{{ route('comments.store', $post) }}" method="POST" class="space-y-4 mb-6">
+                    @csrf
+                    <textarea name="content" rows="3"
+                              class="w-full p-3 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                              placeholder="Escribe tu comentario..."></textarea>
+                    <flux:button
+                        type="submit"
+                        variant="primary"
+                    >
+                        {{ __('Comentar') }}
+                    </flux:button>
+                </form>
+            @else
+                <p class="text-sm text-gray-600 dark:text-gray-400">
+                    Debes <a href="{{ route('login') }}" class="text-blue-600 dark:text-blue-400 underline">iniciar sesión</a> para comentar.
+                </p>
+            @endauth
+
+            {{-- Lista de comentarios --}}
+            @forelse($post->comments as $comment)
+                <div class="border-t pt-4 mt-4 border-gray-200 dark:border-gray-700">
+                    <p class="text-sm font-semibold text-gray-800 dark:text-gray-100">
+                        {{ $comment->user->name }}
+                    </p>
+                    <p class="text-gray-700 dark:text-gray-300">
+                        {{ $comment->content }}
+                    </p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">
+                        {{ $comment->created_at->diffForHumans() }}
+                    </p>
+                </div>
+            @empty
+                <p class="text-sm text-gray-600 dark:text-gray-400">Todavía no hay comentarios.</p>
+            @endforelse
+        </div>
 
         {{-- Botón de regreso --}}
         <div class="pt-6">

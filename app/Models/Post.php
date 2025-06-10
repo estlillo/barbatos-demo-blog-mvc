@@ -33,7 +33,7 @@ class Post extends Model
 
     public function comments()
     {
-        return $this->hasMany(Comment::class);
+        return $this->hasMany(Comment::class)->latest();
     }
 
     public function tags()
@@ -43,7 +43,7 @@ class Post extends Model
 
     public function getRouteKeyName()
     {
-        return 'title';
+        return 'slug';
     }
 
     public function user()
