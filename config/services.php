@@ -14,6 +14,12 @@ return [
     |
     */
 
+    'alfresco' => [
+        'atompub_url' => env('ALFRESCO_ATOMPUB_URL', 'http://test-alfresco.slepmaulecosta.cl:8080/alfresco/s/cmis'),
+        'username' => env('ALFRESCO_USERNAME', 'exedoc'),
+        'password' => env('ALFRESCO_PASSWORD', 'exedoc'),
+    ],
+
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
     ],

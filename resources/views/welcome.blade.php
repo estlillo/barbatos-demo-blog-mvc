@@ -4,6 +4,7 @@
 
 
 
+
     <p class="text-center text-lg">
         {{ __('Welcome!') }}
     </p>

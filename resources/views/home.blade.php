@@ -19,6 +19,11 @@
                     @endif
                 </nav>
             @endguest
+                <form action="{{ route('alfresco.upload') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <input type="file" name="archivo" required>
+                    <button type="submit">Subir archivo</button>
+                </form>
         </div>
         @foreach($posts as $post)
             <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 sm:p-6 space-y-3">

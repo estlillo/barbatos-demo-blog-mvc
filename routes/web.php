@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AlfrescoController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DownloadController;
@@ -43,5 +44,7 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/password', 'settings.password')->name('settings.password');
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
 });
+
+Route::post('/alfresco/upload', [AlfrescoController::class, 'upload'])->name('alfresco.upload');
 
 require __DIR__.'/auth.php';
